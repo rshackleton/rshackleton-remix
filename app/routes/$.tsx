@@ -2,17 +2,17 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 
 export const loader: LoaderFunction = () => {
-  // @todo: Fetch article from CMS
-  throw json('Article not found', {
+  // @todo: Fetch page from CMS
+  throw json('Page not found', {
     status: 404,
-    statusText: `Article Not Found`,
+    statusText: `Page Not Found`,
   });
 };
 
 export const meta: MetaFunction = ({ data }) => {
   if (!data) {
     return {
-      title: `Richard Shackleton - Article Not Found`,
+      title: `Richard Shackleton - Page Not Found`,
     };
   }
 
@@ -21,9 +21,9 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export type ArticlePageProps = {};
+export type ContentPageProps = {};
 
-const ArticlePage: React.FC<ArticlePageProps> = () => {
+const ContentPage: React.FC<ContentPageProps> = () => {
   return (
     <div>
       <h1>Post Name</h1>
@@ -31,4 +31,4 @@ const ArticlePage: React.FC<ArticlePageProps> = () => {
   );
 };
 
-export default ArticlePage;
+export default ContentPage;

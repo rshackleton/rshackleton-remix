@@ -1,4 +1,13 @@
-import type { MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
+
+export const loader: LoaderFunction = () => {
+  // @todo: Fetch articles from CMS
+  throw json('Page not found', {
+    status: 404,
+    statusText: `Page Not Found`,
+  });
+};
 
 export const meta: MetaFunction = () => {
   return {
