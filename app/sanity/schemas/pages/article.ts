@@ -36,7 +36,13 @@ export default {
       name: 'content',
       title: 'Content',
       type: 'array',
-      of: [{ type: 'block' }, { type: 'code' }, { type: 'image' }],
+      of: [
+        { type: 'articleSummary' },
+        { type: 'block' },
+        { type: 'code' },
+        { type: 'image' },
+        { type: 'tweet' },
+      ],
     },
   ],
 };

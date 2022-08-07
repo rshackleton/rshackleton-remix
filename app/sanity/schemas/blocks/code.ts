@@ -7,6 +7,11 @@ export default {
   type: 'object',
   fields: [
     {
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+    },
+    {
       name: 'content',
       title: 'Content',
       type: 'text',
@@ -15,6 +20,11 @@ export default {
       name: 'language',
       title: 'Language',
       type: 'string',
+    },
+    {
+      name: 'sourceUrl',
+      title: 'Source URL',
+      type: 'url',
     },
   ],
 };

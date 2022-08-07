@@ -26,7 +26,7 @@ export type GetArticlesResult = {
 
 export const GetArticles = gql`
   query GetArticles {
-    allArticle {
+    allArticle(sort: { date: DESC }) {
       _id
       banner {
         _key
