@@ -1,5 +1,5 @@
 import { createCliConfig } from 'sanity/cli';
-import config from './app/sanity/sanity.config';
+import config from './sanity.config';
 
 export default createCliConfig({
   api: {

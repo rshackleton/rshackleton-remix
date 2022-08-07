@@ -1,7 +1,7 @@
 import { createConfig } from 'sanity';
 import { deskTool } from 'sanity/desk';
-import { schemaTypes } from './schemas';
-import { structure } from './structure';
+import { schemaTypes } from './app/sanity/schemas';
+import { structure } from './app/sanity/structure';
 
 export default createConfig({
   name: 'default',

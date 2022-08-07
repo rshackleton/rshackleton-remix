@@ -17,5 +17,26 @@ export default {
       type: 'slug',
       options: { source: 'title' },
     },
+    {
+      name: 'date',
+      title: 'Date',
+      type: 'date',
+    },
+    {
+      name: 'banner',
+      title: 'Banner',
+      type: 'image',
+    },
+    {
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+    },
+    {
+      name: 'content',
+      title: 'Content',
+      type: 'array',
+      of: [{ type: 'block' }, { type: 'code' }, { type: 'image' }],
+    },
   ],
 };

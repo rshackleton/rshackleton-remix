@@ -1,22 +1,28 @@
 import type { LoaderFunction } from '@remix-run/node';
+import type { GetArticlesResult } from '~/queries/GetArticles';
+import { GetArticles } from '~/queries/GetArticles';
+import { graphqlClient } from '~/sanity/client';
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async () => {
+  const result = await graphqlClient.request<GetArticlesResult>(GetArticles);
+
+  const articles = result.allArticle;
+
+  const rssItems = articles.map(
+    (article) => `<item>
+  <title>${article.title}</title>
+  <link>https://rshackleton.co.uk/articles/${article.slug.current}</link>
+  <description>${article.summary}</description>
+</item>`,
+  );
+
   const rssString = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss xmlns:blogChannel="https://rshackleton.co.uk/articles" version="2.0">  
   <channel>
     <title>RShackleton Articles</title>
     <link>https://rshackleton.co.uk/articles</link>
     <description>Articles about web development</description>
-    <item>
-      <title>Example 1</title>
-      <link>https://rshackleton.co.uk</link>
-      <description>Example 1</description>
-    </item>
-    <item>
-      <title>Example 2</title>
-      <link>https://rshackleton.co.uk</link>
-      <description>Example 2</description>
-    </item>
+    ${rssItems}
   </channel>  
 </rss>`;
 
