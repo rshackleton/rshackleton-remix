@@ -14,7 +14,6 @@ const Document: React.FC = (props) => {
       <head>
         <Meta />
         <Links />
-        {typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
       <body>
         {props.children}
