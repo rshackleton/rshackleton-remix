@@ -1,27 +1,12 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import imageUrlBuilder from '@sanity/image-url';
 import invariant from 'tiny-invariant';
-import PortableText from '~/components/PortableText';
-import type {
-  ArticleModel,
-  GetArticleBySlugResult,
-} from '~/queries/GetArticleBySlug';
-import { GetArticleBySlug } from '~/queries/GetArticleBySlug';
-import { client, graphqlClient } from '~/sanity/client';
 
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.slug, `$slug is required in url`);
 
-  const result = await graphqlClient.request<GetArticleBySlugResult>(
-    GetArticleBySlug,
-    {
-      slug: params.slug,
-    },
-  );
-
-  const [article] = result.allArticle;
+  const article = undefined;
 
   if (!article) {
     throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
@@ -45,7 +30,7 @@ export const meta: MetaFunction = ({ data }) => {
 export type ArticlePageProps = {};
 
 const ArticlePage: React.FC<ArticlePageProps> = () => {
-  const data = useLoaderData<ArticleModel>();
+  const data = useLoaderData<any>();
 
   const formatter = new Intl.DateTimeFormat(undefined, {
     day: 'numeric',
@@ -53,7 +38,7 @@ const ArticlePage: React.FC<ArticlePageProps> = () => {
     year: 'numeric',
   });
 
-  const builder = imageUrlBuilder(client);
+  // const builder = imageUrlBuilder(client);
 
   return (
     <div>
@@ -64,9 +49,9 @@ const ArticlePage: React.FC<ArticlePageProps> = () => {
         </time>
       </div>
       <div>
-        <img alt="" src={builder.image(data.banner).width(1600).url()} />
+        {/* <img alt="" src={builder.image(data.banner).width(1600).url()} /> */}
       </div>
-      <PortableText value={data.contentRaw} />
+      {/* <PortableText value={data.contentRaw} /> */}
     </div>
   );
 };

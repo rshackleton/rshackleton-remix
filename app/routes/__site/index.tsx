@@ -1,14 +1,9 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import type { GetHomeResult, HomeModel } from '~/queries/GetHome';
-import { GetHome } from '~/queries/GetHome';
-import { graphqlClient } from '~/sanity/client';
 
 export const loader: LoaderFunction = async () => {
-  const result = await graphqlClient.request<GetHomeResult>(GetHome);
-
-  const home = result.Home;
+  const home = undefined;
 
   if (!home) {
     throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
@@ -30,7 +25,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 
 export default function Index() {
-  const data = useLoaderData<HomeModel>();
+  const data = useLoaderData<any>();
 
   return (
     <div>

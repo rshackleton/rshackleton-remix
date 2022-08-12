@@ -1,12 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node';
-import type { GetArticlesResult } from '~/queries/GetArticles';
-import { GetArticles } from '~/queries/GetArticles';
-import { graphqlClient } from '~/sanity/client';
 
 export const loader: LoaderFunction = async () => {
-  const result = await graphqlClient.request<GetArticlesResult>(GetArticles);
-
-  const articles = result.allArticle;
+  const articles: any[] = [];
 
   const rssItems = articles.map(
     (article) => `<item>

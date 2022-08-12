@@ -4,14 +4,9 @@ import { Outlet, useLoaderData } from '@remix-run/react';
 import * as React from 'react';
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
-import type { GetMasterResult, MasterModel } from '~/queries/GetMaster';
-import { GetMaster } from '~/queries/GetMaster';
-import { graphqlClient } from '~/sanity/client';
 
 export const loader: LoaderFunction = async () => {
-  const result = await graphqlClient.request<GetMasterResult>(GetMaster);
-
-  const master = result.Master;
+  const master = undefined;
 
   if (!master) {
     throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
@@ -36,12 +31,12 @@ export const meta: MetaFunction = () => {
 export type SiteLayoutProps = {};
 
 const SiteLayout: React.FC<SiteLayoutProps> = () => {
-  const data = useLoaderData<MasterModel>();
+  const data = useLoaderData<any>();
 
   return (
     <div id="root">
       <Header
-        items={data.navigation.map((item) => ({
+        items={data.navigation.map((item: any) => ({
           id: item._key,
           title: item.title,
           url: item.toUrl ?? '',
