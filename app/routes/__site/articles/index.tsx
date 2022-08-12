@@ -1,53 +1,46 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
+import StoryblokComponent from '~/components/StoryblokComponent';
+import storyblokService from '~/storyblok/service';
+import type { PageStoryblok } from '~/storyblok/storyblok';
 
-export const loader: LoaderFunction = async () => {
-  // @todo: Fetch medium posts from rss feed and merge with cms articles.
-  // @link https://medium.com/feed/@rshackleton
-
-  const articles: any[] = [];
-
-  return json(articles);
+type ArticlesPageModel = {
+  content: any[];
+  title: string;
 };
 
-export const meta: MetaFunction = () => {
+export const loader: LoaderFunction = async () => {
+  const data = await storyblokService.getStory<PageStoryblok>('articles');
+
+  const model: ArticlesPageModel = {
+    content: data.body ?? [],
+    title: data.title,
+  };
+
+  return json(model);
+};
+
+export const meta: MetaFunction = ({ data }) => {
+  if (!data) {
+    return {
+      title: `Richard Shackleton - Page Not Found`,
+    };
+  }
+
   return {
-    title: `Richard Shackleton - Articles`,
+    title: `Richard Shackleton - ${data.title}`,
   };
 };
 
-export default function ArticlesIndex() {
-  const articles = useLoaderData<any[]>();
-
-  const formatter = new Intl.DateTimeFormat(undefined, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
-  // const builder = imageUrlBuilder(client);
+export default function ArticlesPage() {
+  const data = useLoaderData<ArticlesPageModel>();
 
   return (
     <div>
-      <h1>Articles</h1>
-      <ul>
-        {articles.map((article) => (
-          <li key={article._id}>
-            <Link prefetch="intent" to={`/articles/${article.slug.current}`}>
-              {/* <img
-                alt=""
-                src={builder.image(article.banner).width(400).url()}
-              /> */}
-              <h2>{article.title}</h2>
-              <time dateTime={article.date}>
-                <small>{formatter.format(new Date(article.date))}</small>
-              </time>
-              <p>{article.summary}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {data.content.map((data) => (
+        <StoryblokComponent key={data._uid} data={data} />
+      ))}
     </div>
   );
 }

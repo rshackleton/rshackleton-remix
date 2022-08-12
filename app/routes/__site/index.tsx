@@ -1,15 +1,24 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import StoryblokComponent from '~/components/StoryblokComponent';
+import storyblokService from '~/storyblok/service';
+import type { PageStoryblok } from '~/storyblok/storyblok';
+
+type HomePageModel = {
+  content: any[];
+  title: string;
+};
 
 export const loader: LoaderFunction = async () => {
-  const home = undefined;
+  const data = await storyblokService.getStory<PageStoryblok>('home');
 
-  if (!home) {
-    throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
-  }
+  const model: HomePageModel = {
+    content: data.body ?? [],
+    title: data.title,
+  };
 
-  return json(home);
+  return json(model);
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -24,12 +33,14 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export default function Index() {
-  const data = useLoaderData<any>();
+export default function HomePage() {
+  const data = useLoaderData<HomePageModel>();
 
   return (
     <div>
-      <h1>{data.title}</h1>
+      {data.content.map((data) => (
+        <StoryblokComponent key={data._uid} data={data} />
+      ))}
     </div>
   );
 }

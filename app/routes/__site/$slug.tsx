@@ -1,18 +1,28 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import invariant from 'tiny-invariant';
+import StoryblokComponent from '~/components/StoryblokComponent';
+import storyblokService from '~/storyblok/service';
+import type { PageStoryblok } from '~/storyblok/storyblok';
+
+type ContentPageModel = {
+  content: any[];
+  title: string;
+};
 
 export const loader: LoaderFunction = async ({ params }) => {
-  invariant(params.slug, `$slug is required in url`);
-
-  const contentPage = undefined;
-
-  if (!contentPage) {
-    throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
+  if (!params.slug) {
+    throw new Response('Not Found', { status: 404 });
   }
 
-  return json(contentPage);
+  const data = await storyblokService.getStory<PageStoryblok>(params.slug);
+
+  const model: ContentPageModel = {
+    content: data.body ?? [],
+    title: data.title,
+  };
+
+  return json(model);
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -27,17 +37,14 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export type ContentPageProps = {};
-
-const ContentPage: React.FC<ContentPageProps> = () => {
-  const data = useLoaderData<any>();
+export default function ContentPage() {
+  const data = useLoaderData<ContentPageModel>();
 
   return (
     <div>
-      <h1>{data.title}</h1>
-      {/* <PortableText value={data.contentRaw} /> */}
+      {data.content.map((data) => (
+        <StoryblokComponent key={data._uid} data={data} />
+      ))}
     </div>
   );
-};
-
-export default ContentPage;
+}

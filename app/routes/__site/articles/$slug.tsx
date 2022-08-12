@@ -1,18 +1,31 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import invariant from 'tiny-invariant';
+import { render } from 'storyblok-rich-text-react-renderer';
+import storyblokService from '~/storyblok/service';
+import type { ArticleStoryblok } from '~/storyblok/storyblok';
+
+type ArticlePageModel = {
+  content: unknown;
+  date: string;
+  title: string;
+};
 
 export const loader: LoaderFunction = async ({ params }) => {
-  invariant(params.slug, `$slug is required in url`);
-
-  const article = undefined;
-
-  if (!article) {
-    throw json('Page Not Found', { status: 404, statusText: 'Page Not Found' });
+  if (!params.slug) {
+    throw new Response('Not Found', { status: 404 });
   }
 
-  return json(article);
+  const slug = `articles/${params.slug}`;
+  const data = await storyblokService.getStory<ArticleStoryblok>(slug);
+
+  const model: ArticlePageModel = {
+    content: data.body,
+    date: data.date,
+    title: data.title,
+  };
+
+  return json(model);
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -27,33 +40,18 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-export type ArticlePageProps = {};
+export default function ArticlePage() {
+  const data = useLoaderData<ArticlePageModel>();
 
-const ArticlePage: React.FC<ArticlePageProps> = () => {
-  const data = useLoaderData<any>();
-
-  const formatter = new Intl.DateTimeFormat(undefined, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
-  // const builder = imageUrlBuilder(client);
+  const date = new Date(data.date);
 
   return (
     <div>
       <h1>{data.title}</h1>
       <div>
-        <time dateTime={data.date}>
-          {formatter.format(new Date(data.date))}
-        </time>
+        <time dateTime={date.toISOString()}>{date.toLocaleDateString()}</time>
       </div>
-      <div>
-        {/* <img alt="" src={builder.image(data.banner).width(1600).url()} /> */}
-      </div>
-      {/* <PortableText value={data.contentRaw} /> */}
+      <div>{render(data.content)}</div>
     </div>
   );
-};
-
-export default ArticlePage;
+}
