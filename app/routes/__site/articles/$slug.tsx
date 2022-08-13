@@ -1,12 +1,13 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { render } from 'storyblok-rich-text-react-renderer';
+import type { Richtext } from '@storyblok/js';
+import RichText from '~/components/RichText/RichText';
 import storyblokService from '~/storyblok/service';
 import type { ArticleStoryblok } from '~/storyblok/storyblok';
 
 type ArticlePageModel = {
-  content: unknown;
+  content: Richtext;
   date: string;
   title: string;
 };
@@ -20,9 +21,9 @@ export const loader: LoaderFunction = async ({ params }) => {
   const data = await storyblokService.getStory<ArticleStoryblok>(slug);
 
   const model: ArticlePageModel = {
-    content: data.body,
-    date: data.date,
-    title: data.title,
+    content: data.content.body,
+    date: data.content.date,
+    title: data.content.title,
   };
 
   return json(model);
@@ -51,7 +52,7 @@ export default function ArticlePage() {
       <div>
         <time dateTime={date.toISOString()}>{date.toLocaleDateString()}</time>
       </div>
-      <div>{render(data.content)}</div>
+      <RichText content={data.content} />
     </div>
   );
 }

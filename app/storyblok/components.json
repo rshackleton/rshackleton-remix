@@ -67,6 +67,37 @@
       "component_group_name": "Pages"
     },
     {
+      "name": "master",
+      "display_name": "Master",
+      "created_at": "2022-08-13T12:03:06.699Z",
+      "updated_at": "2022-08-13T12:11:55.048Z",
+      "id": 2809972,
+      "schema": {
+        "navigation": {
+          "type": "options",
+          "source": "internal_stories",
+          "required": true,
+          "filter_content_type": [
+            "page"
+          ],
+          "key": "items",
+          "pos": 0
+        }
+      },
+      "image": null,
+      "preview_field": null,
+      "is_root": true,
+      "preview_tmpl": null,
+      "is_nestable": false,
+      "all_presets": [],
+      "preset_id": null,
+      "real_name": "Master",
+      "component_group_uuid": "1767367b-b5c2-49bf-8400-db6d2f642ef8",
+      "color": "#2db47d",
+      "icon": null,
+      "component_group_name": "Aggregation"
+    },
+    {
       "name": "page",
       "display_name": "Page",
       "created_at": "2022-08-12T12:24:19.068Z",

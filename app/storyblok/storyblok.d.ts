@@ -19,6 +19,13 @@ export interface ArticleStoryblok {
   [k: string]: any;
 }
 
+export interface MasterStoryblok {
+  navigation: any[];
+  _uid: string;
+  component: "master";
+  [k: string]: any;
+}
+
 export interface PageStoryblok {
   title: string;
   body?: any[];

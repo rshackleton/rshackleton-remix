@@ -18,8 +18,8 @@ export const loader: LoaderFunction = async ({ params }) => {
   const data = await storyblokService.getStory<PageStoryblok>(params.slug);
 
   const model: ContentPageModel = {
-    content: data.body ?? [],
-    title: data.title,
+    content: data.content.body ?? [],
+    title: data.content.title,
   };
 
   return json(model);

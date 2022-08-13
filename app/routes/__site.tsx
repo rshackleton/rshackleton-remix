@@ -1,26 +1,31 @@
 import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { Outlet, useLoaderData } from '@remix-run/react';
+import type { StoryData } from '@storyblok/js';
 import * as React from 'react';
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
 import type { NavigationItem } from '~/components/Navigation/Navigation';
 import storyblokService from '~/storyblok/service';
+import type { MasterStoryblok, PageStoryblok } from '~/storyblok/storyblok';
 
 type MasterModel = {
   navigation: NavigationItem[];
 };
 
 export const loader: LoaderFunction = async () => {
-  const data = await storyblokService.get<any>('cdn/links');
-
-  const navigation: NavigationItem[] = Object.values(data.links).map(
-    (link: any) => ({
-      id: link.id,
-      title: link.name,
-      url: link.real_path,
-    }),
+  const data = await storyblokService.getStory<MasterStoryblok>(
+    'global/master',
+    { resolve_relations: 'master.navigation' },
   );
+
+  const items = data.content.navigation as StoryData<PageStoryblok>[];
+
+  const navigation: NavigationItem[] = items.map((item) => ({
+    id: item.uuid,
+    title: item.content.title,
+    url: storyblokService.getUrl(item),
+  }));
 
   const master: MasterModel = {
     navigation,

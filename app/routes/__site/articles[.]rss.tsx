@@ -1,13 +1,18 @@
 import type { LoaderFunction } from '@remix-run/node';
+import storyblokService from '~/storyblok/service';
+import type { ArticleStoryblok } from '~/storyblok/storyblok';
 
 export const loader: LoaderFunction = async () => {
-  const articles: any[] = [];
+  const itemData = await storyblokService.getStories<ArticleStoryblok>({
+    is_startpage: 0,
+    starts_with: 'articles/',
+  });
 
-  const rssItems = articles.map(
-    (article) => `<item>
-  <title>${article.title}</title>
-  <link>https://rshackleton.co.uk/articles/${article.slug.current}</link>
-  <description>${article.summary}</description>
+  const rssItems = itemData.map(
+    (item) => `<item>
+  <title>${item.content.title}</title>
+  <link>https://rshackleton.co.uk/${item.full_slug}</link>
+  <description>${item.content.summary}</description>
 </item>`,
   );
 
