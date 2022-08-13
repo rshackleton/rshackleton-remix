@@ -1,9 +1,12 @@
 import type { LoaderFunction } from '@remix-run/node';
-import storyblokService from '~/storyblok/service';
+import { StoryblokService } from '~/storyblok/service';
+
 import type { ArticleStoryblok } from '~/storyblok/storyblok';
 
-export const loader: LoaderFunction = async () => {
-  const itemData = await storyblokService.getStories<ArticleStoryblok>({
+export const loader: LoaderFunction = async ({ request }) => {
+  const service = new StoryblokService(request);
+
+  const itemData = await service.getStories<ArticleStoryblok>({
     is_startpage: 0,
     starts_with: 'articles/',
   });

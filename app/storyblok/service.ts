@@ -11,13 +11,22 @@ import invariant from 'tiny-invariant';
 
 type StoryType = StoryblokComponent<string> & { [index: string]: any };
 
-class StoryblokService {
+export class StoryblokService {
   private api: StoryblokClient;
+  private preview: boolean;
   private verbose: boolean;
 
-  constructor() {
+  constructor(request?: Request) {
+    const referer = request?.headers.get('referer') ?? '';
+    const isStoryblokRequest = referer.includes('app.storyblok.com');
+
+    this.preview = isStoryblokRequest || process.env.NODE_ENV === 'development';
+    this.verbose = process.env.LOG_VERBOSE === 'true';
+
     const { storyblokApi } = storyblokInit({
-      accessToken: process.env.STORYBLOK_ACCESS_TOKEN,
+      accessToken: this.preview
+        ? process.env.STORYBLOK_ACCESS_TOKEN_PREVIEW
+        : process.env.STORYBLOK_ACCESS_TOKEN_PUBLIC,
       bridge: false,
       use: [apiPlugin],
     });
@@ -25,13 +34,12 @@ class StoryblokService {
     invariant(storyblokApi, `Could not create StoryblokClient instance.`);
 
     this.api = storyblokApi;
-    this.verbose = process.env.LOG_VERBOSE === 'true';
   }
 
   async get<T>(slug: string, params: any = {}): Promise<T> {
     try {
       const result = await this.api.get(slug, {
-        version: process.env.NODE_ENV === 'development' ? 'draft' : 'published',
+        version: this.preview ? 'draft' : 'published',
         ...params,
       });
 
@@ -53,7 +61,7 @@ class StoryblokService {
   ): Promise<StoryData<T>> {
     try {
       const result = await this.api.getStory(slug, {
-        version: process.env.NODE_ENV === 'development' ? 'draft' : 'published',
+        version: this.preview ? 'draft' : 'published',
         ...params,
       });
 
@@ -73,7 +81,7 @@ class StoryblokService {
     params: StoriesParams = {},
   ): Promise<StoryData<T>[]> {
     const result = await this.api.getStories({
-      version: process.env.NODE_ENV === 'development' ? 'draft' : 'published',
+      version: this.preview ? 'draft' : 'published',
       ...params,
     });
 
@@ -96,7 +104,3 @@ class StoryblokService {
     }
   }
 }
-
-const storyblokService = new StoryblokService();
-
-export default storyblokService;

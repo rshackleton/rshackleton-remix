@@ -2,7 +2,8 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import StoryblokComponent from '~/components/StoryblokComponent';
-import storyblokService from '~/storyblok/service';
+import { StoryblokService } from '~/storyblok/service';
+
 import type { PageStoryblok } from '~/storyblok/storyblok';
 
 type HomePageModel = {
@@ -10,8 +11,10 @@ type HomePageModel = {
   title: string;
 };
 
-export const loader: LoaderFunction = async () => {
-  const data = await storyblokService.getStory<PageStoryblok>('home');
+export const loader: LoaderFunction = async ({ request }) => {
+  const service = new StoryblokService(request);
+
+  const data = await service.getStory<PageStoryblok>('home');
 
   const model: HomePageModel = {
     content: data.content.body ?? [],

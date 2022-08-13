@@ -2,7 +2,8 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/node';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import StoryblokComponent from '~/components/StoryblokComponent';
-import storyblokService from '~/storyblok/service';
+import { StoryblokService } from '~/storyblok/service';
+
 import type { PageStoryblok } from '~/storyblok/storyblok';
 
 type ContentPageModel = {
@@ -10,12 +11,14 @@ type ContentPageModel = {
   title: string;
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
   if (!params.slug) {
     throw new Response('Not Found', { status: 404 });
   }
 
-  const data = await storyblokService.getStory<PageStoryblok>(params.slug);
+  const service = new StoryblokService(request);
+
+  const data = await service.getStory<PageStoryblok>(params.slug);
 
   const model: ContentPageModel = {
     content: data.content.body ?? [],

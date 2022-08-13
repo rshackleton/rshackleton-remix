@@ -3,7 +3,8 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import type { Richtext } from '@storyblok/js';
 import RichText from '~/components/RichText/RichText';
-import storyblokService from '~/storyblok/service';
+import { StoryblokService } from '~/storyblok/service';
+
 import type { ArticleStoryblok } from '~/storyblok/storyblok';
 
 type ArticlePageModel = {
@@ -12,13 +13,15 @@ type ArticlePageModel = {
   title: string;
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
   if (!params.slug) {
     throw new Response('Not Found', { status: 404 });
   }
 
+  const service = new StoryblokService(request);
+
   const slug = `articles/${params.slug}`;
-  const data = await storyblokService.getStory<ArticleStoryblok>(slug);
+  const data = await service.getStory<ArticleStoryblok>(slug);
 
   const model: ArticlePageModel = {
     content: data.content.body,

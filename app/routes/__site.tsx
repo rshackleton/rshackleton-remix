@@ -6,25 +6,27 @@ import * as React from 'react';
 import Footer from '~/components/Footer/Footer';
 import Header from '~/components/Header/Header';
 import type { NavigationItem } from '~/components/Navigation/Navigation';
-import storyblokService from '~/storyblok/service';
+import { StoryblokService } from '~/storyblok/service';
+
 import type { MasterStoryblok, PageStoryblok } from '~/storyblok/storyblok';
 
 type MasterModel = {
   navigation: NavigationItem[];
 };
 
-export const loader: LoaderFunction = async () => {
-  const data = await storyblokService.getStory<MasterStoryblok>(
-    'global/master',
-    { resolve_relations: 'master.navigation' },
-  );
+export const loader: LoaderFunction = async ({ request }) => {
+  const service = new StoryblokService(request);
+
+  const data = await service.getStory<MasterStoryblok>('global/master', {
+    resolve_relations: 'master.navigation',
+  });
 
   const items = data.content.navigation as StoryData<PageStoryblok>[];
 
   const navigation: NavigationItem[] = items.map((item) => ({
     id: item.uuid,
     title: item.content.title,
-    url: storyblokService.getUrl(item),
+    url: service.getUrl(item),
   }));
 
   const master: MasterModel = {
