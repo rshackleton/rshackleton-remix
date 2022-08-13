@@ -1,19 +1,20 @@
+import type { SbBlokKeyDataTypes } from '@storyblok/js';
 import * as React from 'react';
+import type { StoryblokComponent as StoryblokComponentType } from 'storyblok-js-client';
+import HeroBanner from './HeroBanner/HeroBanner';
 
-type ComponentType = 'grid' | 'feature' | 'teaser';
+export type ComponentName = 'heroBanner';
 
-const components: Record<ComponentType, React.FC> = {
-  grid: () => <div>Grid</div>,
-  feature: () => <div>Feature</div>,
-  teaser: () => <div>Teaser</div>,
+export type ComponentData = StoryblokComponentType<ComponentName> & {
+  [index: string]: SbBlokKeyDataTypes;
 };
 
-interface IBlok {
-  component: keyof typeof components;
-}
+const components: Record<ComponentName, React.FC<any>> = {
+  heroBanner: HeroBanner,
+};
 
 export type StoryblokComponentProps = {
-  data: IBlok;
+  data: ComponentData;
 };
 
 const StoryblokComponent: React.FC<StoryblokComponentProps> = (props) => {

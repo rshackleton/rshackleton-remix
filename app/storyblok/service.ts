@@ -18,7 +18,7 @@ class StoryblokService {
   constructor() {
     const { storyblokApi } = storyblokInit({
       accessToken: process.env.STORYBLOK_ACCESS_TOKEN,
-      bridge: true,
+      bridge: false,
       use: [apiPlugin],
     });
 

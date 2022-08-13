@@ -14,23 +14,61 @@ export interface ArticleStoryblok {
   date: string;
   summary: string;
   body: any;
+  categories?: any[];
   _uid: string;
-  component: "article";
+  component: 'article';
+  [k: string]: any;
+}
+
+export type MultilinkStoryblok =
+  | {
+      cached_url?: string;
+      linktype?: string;
+      [k: string]: any;
+    }
+  | {
+      id?: string;
+      cached_url?: string;
+      linktype?: 'story';
+      [k: string]: any;
+    }
+  | {
+      url?: string;
+      cached_url?: string;
+      linktype?: 'asset' | 'url';
+      [k: string]: any;
+    }
+  | {
+      email?: string;
+      linktype?: 'email';
+      [k: string]: any;
+    };
+
+export interface HeroBannerStoryblok {
+  title: string;
+  content?: string;
+  image?: AssetStoryblok;
+  cta?: MultilinkStoryblok;
+  ctaText?: string;
+  _uid: string;
+  component: 'heroBanner';
   [k: string]: any;
 }
 
 export interface MasterStoryblok {
   navigation: any[];
   _uid: string;
-  component: "master";
+  component: 'master';
   [k: string]: any;
 }
 
 export interface PageStoryblok {
   title: string;
   body?: any[];
+  description?: string;
+  ogImage?: AssetStoryblok;
   _uid: string;
-  component: "page";
+  component: 'page';
   uuid?: string;
   [k: string]: any;
 }

@@ -7,8 +7,11 @@ import {
   ScrollRestoration,
   useCatch,
 } from '@remix-run/react';
+import { useStoryblokBridge } from './storyblok/useStoryblokBridge';
 
 const Document: React.FC = (props) => {
+  useStoryblokBridge();
+
   return (
     <html lang="en">
       <head>
