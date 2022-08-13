@@ -8,16 +8,21 @@ export type NavigationItem = {
 };
 
 export type NavigationProps = {
+  className?: string;
   items: NavigationItem[];
 };
 
 const Navigation: React.FC<NavigationProps> = (props) => {
   return (
-    <nav>
-      <ul>
+    <nav className={props.className}>
+      <ul className="flex gap-6">
         {props.items.map((item) => (
           <li key={item.id}>
-            <Link prefetch="intent" to={item.url}>
+            <Link
+              className="inline-block underline-offset-2 hover:underline"
+              prefetch="intent"
+              to={item.url}
+            >
               {item.title}
             </Link>
           </li>

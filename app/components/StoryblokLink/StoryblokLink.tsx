@@ -3,37 +3,60 @@ import * as React from 'react';
 import type { MultilinkStoryblok } from '~/storyblok/storyblok';
 
 export type StoryblokLinkProps = {
+  className?: string;
   link: MultilinkStoryblok;
 };
 
-const StoryblokLink: React.FC<StoryblokLinkProps> = (props) => {
-  switch (props.link.linktype) {
+const StoryblokLink: React.FC<StoryblokLinkProps> = ({
+  children,
+  link,
+  ...otherProps
+}) => {
+  switch (link.linktype) {
     case 'story':
       return (
-        <Link prefetch="intent" to={sanitiseSlug(props.link.cached_url ?? '')}>
-          {props.children}
+        <Link
+          prefetch="intent"
+          to={sanitiseSlug(link.cached_url ?? '')}
+          {...otherProps}
+        >
+          {children}
         </Link>
       );
 
     case 'asset':
       return (
-        <a href={props.link.cached_url} rel="noreferrer" target="_blank">
-          {props.children}
+        <a
+          href={link.cached_url}
+          rel="noreferrer"
+          target="_blank"
+          {...otherProps}
+        >
+          {children}
         </a>
       );
 
     case 'url':
       return (
-        <a href={props.link.cached_url} rel="noreferrer" target="_blank">
-          {props.children}
+        <a
+          href={link.cached_url}
+          rel="noreferrer"
+          target="_blank"
+          {...otherProps}
+        >
+          {children}
         </a>
       );
 
     case 'email':
-      return <a href={`mailto:${props.link.cached_url}`}>{props.children}</a>;
+      return (
+        <a href={`mailto:${link.cached_url}`} {...otherProps}>
+          {children}
+        </a>
+      );
 
     default:
-      return <span>{props.children}</span>;
+      return <span {...otherProps}>{children}</span>;
   }
 
   function sanitiseSlug(input: string): string {

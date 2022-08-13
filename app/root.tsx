@@ -1,3 +1,4 @@
+import type { LinksFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -8,6 +9,11 @@ import {
   useCatch,
 } from '@remix-run/react';
 import { useStoryblokBridge } from './storyblok/useStoryblokBridge';
+import styles from './styles/app.css';
+
+export const links: LinksFunction = () => {
+  return [{ rel: 'stylesheet', href: styles }];
+};
 
 const Document: React.FC = (props) => {
   useStoryblokBridge();

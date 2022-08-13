@@ -4,8 +4,10 @@ export type FooterProps = {};
 
 const Footer: React.FC<FooterProps> = () => {
   return (
-    <footer>
-      <p>&copy; Richard Shackleton {new Date().getUTCFullYear()}</p>
+    <footer className="flex items-center p-4">
+      <p className="text-sm text-slate-500">
+        &copy; Richard Shackleton {new Date().getUTCFullYear()}
+      </p>
     </footer>
   );
 };
