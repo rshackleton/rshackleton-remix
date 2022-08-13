@@ -19,7 +19,7 @@ const HeroBanner: React.FC<HeroBannerProps> = (props) => {
         )}
         {props.cta && (
           <StoryblokLink
-            className="inline-block scale-100 rounded bg-indigo-500 py-3 px-5 font-bold text-white subpixel-antialiased transition will-change-transform text-base hover:scale-110 hover:bg-indigo-400"
+            className="inline-block scale-100 rounded bg-primary-500 py-3 px-5 font-bold text-white subpixel-antialiased transition will-change-transform text-base hover:scale-110 hover:bg-primary-400"
             link={props.cta}
           >
             {props.ctaText}

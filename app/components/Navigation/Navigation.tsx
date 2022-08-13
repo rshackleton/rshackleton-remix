@@ -19,7 +19,7 @@ const Navigation: React.FC<NavigationProps> = (props) => {
         {props.items.map((item) => (
           <li key={item.id}>
             <Link
-              className="inline-block underline-offset-2 hover:underline"
+              className="inline-block font-medium underline-offset-4 hover:underline"
               prefetch="intent"
               to={item.url}
             >

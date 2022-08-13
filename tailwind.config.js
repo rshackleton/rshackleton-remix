@@ -1,10 +1,23 @@
+const colors = require('tailwindcss/colors');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
-  corePlugins: {
-    fontSize: false,
-  },
   theme: {
+    colors: {
+      current: 'currentColor',
+      transparent: 'transparent',
+
+      // Specific colours
+      black: colors.black,
+      white: colors.white,
+      gray: colors.gray,
+
+      // Named colours
+      base: colors.gray,
+      primary: colors.indigo,
+      accent: colors.indigo,
+    },
     fluidType: {
       settings: {
         fontSizeMin: toRem(16),
@@ -18,7 +31,10 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-fluid-type')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('tailwindcss-fluid-type'),
+  ],
 };
 
 function toRem(pixelValue) {

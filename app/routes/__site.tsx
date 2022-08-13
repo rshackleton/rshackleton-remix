@@ -57,7 +57,7 @@ const SiteLayout: React.FC<SiteLayoutProps> = () => {
   const data = useLoaderData<MasterModel>();
 
   return (
-    <div id="root">
+    <div id="root" className="site-container">
       <Header items={data.navigation} />
 
       <main id="main">

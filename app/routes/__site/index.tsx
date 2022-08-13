@@ -37,10 +37,10 @@ export default function HomePage() {
   const data = useLoaderData<HomePageModel>();
 
   return (
-    <div>
+    <>
       {data.content.map((data) => (
         <StoryblokComponent key={data._uid} data={data} />
       ))}
-    </div>
+    </>
   );
 }

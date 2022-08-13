@@ -41,10 +41,10 @@ export default function ContentPage() {
   const data = useLoaderData<ContentPageModel>();
 
   return (
-    <div>
+    <>
       {data.content.map((data) => (
         <StoryblokComponent key={data._uid} data={data} />
       ))}
-    </div>
+    </>
   );
 }

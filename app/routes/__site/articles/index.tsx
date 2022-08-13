@@ -58,7 +58,7 @@ export default function ArticlesPage() {
   const data = useLoaderData<ArticlesPageModel>();
 
   return (
-    <div>
+    <>
       {data.items.map((item) => (
         <article key={item.id}>
           <Link prefetch="intent" to={item.url}>
@@ -69,6 +69,6 @@ export default function ArticlesPage() {
       {data.content.map((data) => (
         <StoryblokComponent key={data._uid} data={data} />
       ))}
-    </div>
+    </>
   );
 }

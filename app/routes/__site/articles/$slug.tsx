@@ -47,12 +47,27 @@ export default function ArticlePage() {
   const date = new Date(data.date);
 
   return (
-    <div>
-      <h1>{data.title}</h1>
-      <div>
-        <time dateTime={date.toISOString()}>{date.toLocaleDateString()}</time>
+    <>
+      <div className="mx-auto px-4 text-center">
+        <h1 className="pb-4 font-bold text-2xl">{data.title}</h1>
+        <div className="pb-8 font-medium text-lg">
+          <time dateTime={date.toISOString()}>{formatDate(date)}</time>
+        </div>
       </div>
-      <RichText content={data.content} />
-    </div>
+
+      <RichText className="px-4" content={data.content} />
+    </>
   );
+
+  function formatDate(value: string | Date): string {
+    const formatter = new Intl.DateTimeFormat(undefined, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    return formatter.format(
+      typeof value === 'string' ? new Date(value) : value,
+    );
+  }
 }

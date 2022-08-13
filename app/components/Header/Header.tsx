@@ -14,11 +14,14 @@ export type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = (props) => {
   return (
-    <header className="flex items-center p-4 text-base">
-      <Link className="inline-block underline-offset-2 hover:underline" to="/">
+    <header className="flex flex-col items-center px-4 py-12 text-base">
+      <Link
+        className="inline-block pb-4 font-bold underline-offset-4 text-xl hover:underline"
+        to="/"
+      >
         Richard Shackleton
       </Link>
-      <Navigation className="ml-auto" items={props.items} />
+      <Navigation items={props.items} />
     </header>
   );
 };
