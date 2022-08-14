@@ -72,7 +72,7 @@ export class StoryblokService {
         ...params,
       });
 
-      this.log(JSON.stringify(result));
+      // this.log(JSON.stringify(result));
       this.log('\n### end calling StoryblokService.get');
 
       return result.data as T;
@@ -99,7 +99,7 @@ export class StoryblokService {
         ...params,
       });
 
-      this.log(JSON.stringify(result));
+      // this.log(JSON.stringify(result));
       this.log('\n### end calling StoryblokService.getStory');
 
       return result.data.story as StoryData<T>;
@@ -123,7 +123,7 @@ export class StoryblokService {
       ...params,
     });
 
-    this.log(JSON.stringify(result));
+    // this.log(JSON.stringify(result));
     this.log('\n### end calling StoryblokService.getStories');
 
     return result.data.stories as StoryData<T>[];
