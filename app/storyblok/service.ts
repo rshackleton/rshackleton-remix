@@ -18,7 +18,8 @@ export class StoryblokService {
 
   constructor(request?: Request) {
     const referer = request?.headers.get('referer') ?? '';
-    const isStoryblokRequest = referer.includes('app.storyblok.com');
+    const isStoryblokRequest =
+      referer.includes('app.storyblok.com') || referer.includes('_storyblok');
 
     this.preview = isStoryblokRequest || process.env.NODE_ENV === 'development';
     this.verbose = process.env.LOG_VERBOSE === 'true';
