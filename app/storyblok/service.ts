@@ -33,17 +33,47 @@ export class StoryblokService {
 
     invariant(storyblokApi, `Could not create StoryblokClient instance.`);
 
+    this.log('### creating StoryblokService instance\n');
+    this.log('referer', referer);
+    this.log('isStoryblokRequest', isStoryblokRequest);
+    this.log('NODE_ENV', process.env.NODE_ENV);
+    this.log('this.preview', this.preview);
+    this.log('cacheVersions', storyblokApi.cacheVersions());
+    this.log('\n### end creating StoryblokService instance');
+
+    storyblokApi.client.interceptors.request.use(
+      (config) => {
+        this.log(
+          'axios',
+          config.method,
+          config.baseURL,
+          config.url,
+          config.params,
+        );
+        return config;
+      },
+      (error) => {
+        this.log('axios', error);
+        return error;
+      },
+    );
+
     this.api = storyblokApi;
   }
 
   async get<T>(slug: string, params: any = {}): Promise<T> {
     try {
+      this.log('### calling StoryblokService.get\n');
+      this.log('slug', slug);
+      this.log('this.preview', this.preview);
+
       const result = await this.api.get(slug, {
         version: this.preview ? 'draft' : 'published',
         ...params,
       });
 
-      this.log(JSON.stringify(result, null, 2));
+      this.log(JSON.stringify(result));
+      this.log('\n### end calling StoryblokService.get');
 
       return result.data as T;
     } catch (error) {
@@ -60,12 +90,17 @@ export class StoryblokService {
     params: StoryParams = {},
   ): Promise<StoryData<T>> {
     try {
+      this.log('### calling StoryblokService.getStory\n');
+      this.log('slug', slug);
+      this.log('this.preview', this.preview);
+
       const result = await this.api.getStory(slug, {
         version: this.preview ? 'draft' : 'published',
         ...params,
       });
 
-      this.log(JSON.stringify(result, null, 2));
+      this.log(JSON.stringify(result));
+      this.log('\n### end calling StoryblokService.getStory');
 
       return result.data.story as StoryData<T>;
     } catch (error) {
@@ -80,12 +115,16 @@ export class StoryblokService {
   async getStories<T extends StoryType>(
     params: StoriesParams = {},
   ): Promise<StoryData<T>[]> {
+    this.log('### calling StoryblokService.getStories\n');
+    this.log('this.preview', this.preview);
+
     const result = await this.api.getStories({
       version: this.preview ? 'draft' : 'published',
       ...params,
     });
 
-    this.log(result.data.stories[0]);
+    this.log(JSON.stringify(result));
+    this.log('\n### end calling StoryblokService.getStories');
 
     return result.data.stories as StoryData<T>[];
   }
@@ -100,7 +139,7 @@ export class StoryblokService {
 
   private log(...args: any[]) {
     if (this.verbose) {
-      console.log(args);
+      console.log(...args);
     }
   }
 }
