@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node';
+import type { LinksFunction } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -8,21 +8,16 @@ import {
   ScrollRestoration,
   useCatch,
 } from '@remix-run/react';
+import { useStoryblokBridge } from './storyblok/useStoryblokBridge';
+import styles from './styles/app.css';
 
-export const meta: MetaFunction = () => {
-  return {
-    charset: 'utf-8',
-    description: ``,
-    'twitter:image': '',
-    'twitter:card': 'summary_large_image',
-    'twitter:creator': '@shackleberry112',
-    'twitter:site': '@shackleberry112',
-    'twitter:title': ``,
-    'twitter:description': ``,
-  };
+export const links: LinksFunction = () => {
+  return [{ rel: 'stylesheet', href: styles }];
 };
 
-function Document({ children }: { children: React.ReactNode; title?: string }) {
+const Document: React.FC = (props) => {
+  useStoryblokBridge();
+
   return (
     <html lang="en">
       <head>
@@ -30,44 +25,42 @@ function Document({ children }: { children: React.ReactNode; title?: string }) {
         <Links />
       </head>
       <body>
-        {children}
+        {props.children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
+        {process.env.NODE_ENV === 'development' && <LiveReload />}
       </body>
     </html>
   );
-}
+};
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <Document>
       <Outlet />
     </Document>
   );
-}
+};
 
-export function CatchBoundary() {
+export default App;
+
+export const CatchBoundary: React.FC = () => {
   const caught = useCatch();
 
   return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
-      <div className="error-container">
-        <h1>
-          {caught.status} {caught.statusText}
-        </h1>
-      </div>
+    <Document>
+      <h1>
+        {caught.status}&nbsp;{caught.statusText}
+      </h1>
     </Document>
   );
-}
+};
 
-export function ErrorBoundary({ error }: { error: Error }) {
+export const ErrorBoundary: React.FC<{ error: Error }> = (props) => {
   return (
-    <Document title="Uh-oh!">
-      <div className="error-container">
-        <h1>App Error</h1>
-        <pre>{error.message}</pre>
-      </div>
+    <Document>
+      <h1>App Error</h1>
+      <pre>{props.error.message}</pre>
     </Document>
   );
-}
+};
